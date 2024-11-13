@@ -1,15 +1,23 @@
+from typing import Optional
 from sqlmodel import Field, SQLModel, create_engine # type: ignore
 
-
-class Hero(SQLModel, table=True):
+class Application(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str
-    secret_name: str
-    age: int | None = None
-    
-hero: Hero = {
-    "id": 0,
-    "name": "Hello",
-    "secret_name": "World",
-    "age": 0
-}
+    last_name: str
+    first_name: str
+    middle_name: str
+    birth_date: str
+    sex: str
+    height: str
+    unit_num: str
+    street_num: str
+    po_box: str
+    city: str
+    province: str
+    postal_code: str
+    completed: bool
+
+class ErrorMessage(SQLModel, table=False):
+    message: str
+    error: Optional[str]

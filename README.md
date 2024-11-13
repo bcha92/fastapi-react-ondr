@@ -2,19 +2,19 @@
 
 ## Getting Started
 
-### Generate SQLite Table with Sample Applications
+### Installing Backend Dependencies and Generating SQLite Table with Sample Applications
 
 ```bash
 cd backend
+pip install fastapi
 python generate.py
+cd ..
 ```
 
 ### Backend Server Initialization (FASTAPI)
 
 ```bash
-cd backend
-pip install fastapi
-fastapi dev main.py
+fastapi dev backend/main.py
 ```
 
 ### Frontend Application Initialization (NEXTJS)

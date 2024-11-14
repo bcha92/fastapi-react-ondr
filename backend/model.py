@@ -1,5 +1,5 @@
 from typing import Optional
-from sqlmodel import Field, SQLModel, create_engine # type: ignore
+from sqlmodel import Field, SQLModel
 
 class Application(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
@@ -12,6 +12,7 @@ class Application(SQLModel, table=True):
     height: str
     unit_num: str
     street_num: str
+    street_name: str
     po_box: str
     city: str
     province: str

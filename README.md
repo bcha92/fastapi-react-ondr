@@ -2,12 +2,11 @@
 
 ## Getting Started
 
-### Installing Backend Dependencies and Generating SQLite Table with Sample Applications
+### Installing Backend Dependencies
 
 ```bash
 cd backend
 pip install fastapi
-python generate.py
 cd ..
 ```
 
@@ -16,6 +15,11 @@ cd ..
 ```bash
 fastapi dev backend/main.py
 ```
+
+#### Create SQLite Table and Sample Rows (ONLY NEEDS TO BE DONE ONCE)
+
+To create the SQL Table for Applications and Populate with Sample Values, GET endpoint `/create-sqlite-db-table-and-populate/` at your localhost link
+Default localhost endpoint: `http://127.0.0.1:8000/create-sqlite-db-table-and-populate/`
 
 ### Frontend Application Initialization (NEXTJS)
 

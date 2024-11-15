@@ -1,4 +1,4 @@
 # Ignore Python Git Files
 venv
 __pycache__
-on_dr.db
+*.db

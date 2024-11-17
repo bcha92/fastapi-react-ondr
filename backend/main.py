@@ -1,6 +1,6 @@
 from typing import Annotated
 from fastapi import FastAPI, Path, HTTPException # type: ignore
-from helper import Query, httpError
+from helper import Query
 from model import AppName, AppForm, SuccessBody, output_body, form_errors
 app = FastAPI()
 
@@ -18,20 +18,20 @@ async def one_application(app_id: Annotated[str, Path(name="application-id")]) -
         get_one = Query().get_one_by_id(int_id)
         
     except ValueError:
-        httpError("Bad request. Application ID required to be parsable integer", 400)
+        raise HTTPException(400, "Bad request. Application ID required to be parsable integer")
     except:
-        httpError("The application you requested does not exist or has been deleted", 404)
+        raise HTTPException(404, "The application you requested does not exist or has been deleted")
     
     return output_body(200, f"Sucessfully retrieved application ID #{app_id}", get_one)
 
 
 @app.post("/create/", status_code=201)
 async def new_application(body: AppName) -> SuccessBody:
-    if body.app_name == "": httpError("Please enter a new name for application", 400)
+    if body.app_name == "": raise HTTPException(400, "Please enter a new name for application")
     try:
         new_row_id = Query().create_new(body.app_name)
     except new_row_id != None:
-        httpError("Application create exception", 404)
+        raise HTTPException(404, "New application create exception")
     return output_body(
         201, f"Sucessfully created a new application named {body.app_name} with ID {str(new_row_id)}",
         { "app_name": body.app_name, "id": new_row_id }
@@ -44,13 +44,16 @@ async def update_application(app_id: Annotated[str, Path(name="application-id")]
     application = await one_application(int(app_id))
     # Raises exception if user tries to re-submit a successful form
     if application["body"].submitted == 1:
-        raise httpError("Bad request. Cannot edit form already submitted by user", 400)
+        raise HTTPException(400, "Cannot edit form already submitted by user")
     
     # Should not be submittable if errors are found in final
     if final: # Final checks with backend form verification
         form_error_list = form_errors(updated_body)
         if len(form_error_list) > 0:
-            return output_body(400, str(form_error_list), application["body"])
+            raise HTTPException(400, "Form check failed. Errors found in fields: " + ", ".join(form_error_list))
+    else: # app_name should not be blank if submit is not final
+        if len(updated_body.app_name) == 0:
+            raise HTTPException(400, "Bad request. app_name cannot be blank on draft save")
     
     # Should update once checks finalized (or to save progress)
     updated = Query().update_one_application(application["body"], updated_body, final)
@@ -66,7 +69,7 @@ async def delete_application(app_id: Annotated[str, Path(name="application-id")]
     try:
         deleted = Query().delete_one_application(application["body"])
     except ValueError:
-        httpError("Bad request. Application ID required to be parsable integer", 400)
+        raise HTTPException(400, "Application ID required to be parsable integer")
     return output_body(202, f"The application with ID {app_id} has been successfully deleted", deleted)
 
 
@@ -84,7 +87,7 @@ async def generate_db_table():
     try:
         Query.generate_db_and_table()
     except:
-        httpError(404, "Application create exception - Unable to generate db, table, and/or values")
+        raise HTTPException(404, "Application create exception - Unable to generate db, table, and/or values")
         
     return "SQLite DB and Table successfully created. Please return to your localhost (default: http://127.0.0.1:8000/) to check!"
 
@@ -94,5 +97,5 @@ async def generate_values():
     try:
         created_values = Query.generate_sample_values()
     except len(created_values) == 0:
-        httpError(404, "Application create exception - Unable to populate values")
+        raise HTTPException(404, "Application create exception - Unable to populate values")
     return "Sqlite Sample Values have been successfully populated. Please return to your localhost (default: http://127.0.0.1:8000/) to check!"

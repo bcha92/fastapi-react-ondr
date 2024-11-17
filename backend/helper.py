@@ -1,11 +1,6 @@
 from sqlmodel import SQLModel, create_engine, Session, select # type: ignore
 from model import Application, AppForm
-from main import HTTPException
 from sample_data import db_name, db_sample_values
-
-# HTTP Exception Error Handling
-def httpError(detail: str, status_code: int = 404):
-    raise HTTPException(status_code, detail)
 
 class Query:
     # DB Initialization Functions

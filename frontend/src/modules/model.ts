@@ -26,12 +26,3 @@ export interface Application extends FormBody {
   id: number | undefined;
   submitted: number;
 }
-
-export interface TextLang {
-  en?: string;
-  fr?: string;
-}
-
-export type PageText<T> = {
-  [K in keyof T]: TextLang;
-};

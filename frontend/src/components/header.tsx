@@ -7,7 +7,7 @@ import Toggle from "./toggle";
 const Header = () => {
   const { toggleLang } = useContext(ThemeContext);
   return (
-    <header className="flex flex-row items-center justify-between w-full">
+    <header className="flex flex-row items-center justify-between w-full pt-4">
       <h2></h2>
       {/* TODO Enable Light/Dark Mode */}
       <div>

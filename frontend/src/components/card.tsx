@@ -1,21 +1,59 @@
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, ReactNode } from "react";
+import { Save, RemoveCircleOutline, MoreHoriz } from "@mui/icons-material";
+import "./mui-icon.css";
 
 const Card = ({
   name,
-  mainClick,
-  secondaryClick,
+  onClick,
+  disabled,
+  loading,
+  loaded,
+  iconStatic,
+  iconDynamic = <Save className="text-black" />,
 }: {
   name: string;
-  mainClick?: MouseEventHandler<HTMLInputElement>;
-  secondaryClick?: MouseEventHandler<HTMLInputElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
+  loading?: boolean;
+  loaded?: boolean;
+  iconStatic?: ReactNode;
+  iconDynamic?: ReactNode;
 }) => {
+  const inheritedClassNames =
+    iconStatic || loaded
+      ? "text-black"
+      : loading
+      ? "text-grey"
+      : disabled
+      ? "text-rose-900"
+      : "text-black";
   return (
-    <div className="flex flex-col bg-white opacity-70 m-2">
-      <button>
-        <h3 className="text-black">{name}</h3>
-      </button>
-      <button>Trash</button>
-    </div>
+    <button
+      onClick={onClick}
+      className={
+        (iconStatic || loaded
+          ? "cursor-pointer opacity-70"
+          : loading
+          ? "cursor-wait opacity-60"
+          : disabled
+          ? "cursor-not-allowed opacity-60"
+          : "cursor-pointer opacity-70") +
+        "flex flex-col justify-center bg-white m-4 min-w-[100px] min-h-[100px] hover:opacity-100"
+      }
+      disabled={loading || disabled}
+    >
+      {iconStatic ??
+        (loaded ? (
+          iconDynamic
+        ) : loading ? (
+          <MoreHoriz className={inheritedClassNames} />
+        ) : disabled ? (
+          <RemoveCircleOutline className={inheritedClassNames} />
+        ) : (
+          <MoreHoriz className={inheritedClassNames} />
+        ))}
+      <h3 className={inheritedClassNames}>{name}</h3>
+    </button>
   );
 };
 

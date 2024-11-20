@@ -38,7 +38,7 @@ const Card = ({
           : disabled
           ? "cursor-not-allowed opacity-60"
           : "cursor-pointer opacity-70") +
-        "flex flex-col justify-center bg-white m-4 min-w-[100px] min-h-[100px] hover:opacity-100"
+        "flex flex-col justify-center bg-white m-4 p-2 min-w-[100px] min-h-[100px] max-w-[120px] hover:opacity-100"
       }
       disabled={loading || disabled}
     >

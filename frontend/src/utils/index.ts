@@ -6,4 +6,5 @@ export type {
   AppName,
   ReducerState,
 } from "./model";
-export { getApplications } from "./api";
+export { getApplications, getOneApplication } from "./api";
+export { getInitState, getReducer } from "./reducers";

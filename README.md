@@ -1,6 +1,6 @@
 # FASTAPI-REACT ONTARIO DRIVER LICENSE APPLICATION
 
-## Getting Started
+## Getting Started - Backend
 
 ### Installing Backend Dependencies
 
@@ -37,6 +37,18 @@ DELETE `/delete/{app_id}`
 POST `/generate-new-db-table/values`
 POST `/generate-new-db-table`
 POST `/generate-sample-values`
+
+## Getting Started - Frontend
+
+### Installing Frontend Dependencies
+
+```bash
+cd frontend
+npm i --force
+cd ..
+```
+
+alternatively, `npm install --force` also works
 
 ### Frontend Application Initialization (NEXTJS)
 

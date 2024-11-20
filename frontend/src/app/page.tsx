@@ -1,19 +1,34 @@
 // @ts-nocheck
 "use client";
-import { useContext, useReducer, useEffect } from "react";
+import { useContext, useReducer, useEffect, useState } from "react";
 import { ThemeContext } from "./theme-provider";
-import { text, getApplications } from "@/modules";
+import { text, getApplications } from "@/utils";
 import { Header, HomeRoot, HomeOpen } from "../components";
 
 const initState = { status: "idle", error: undefined, data: undefined };
 function reducer(state, action) {
-  return { status: action.type };
+  switch (action.type) {
+    case "loading":
+      return { status: action.type, error: undefined, data: undefined };
+    case "done":
+      return { status: action.type, error: undefined, data: action.data };
+    case "error":
+      return { status: action.type, error: action.error, data: action.data };
+    default: // Idle
+      return state;
+  }
 }
 
 export default function Home() {
   const { home } = text;
-  const { lang } = useContext(ThemeContext);
+  const { lang }: { lang: string } = useContext(ThemeContext);
   const [state, dispatch] = useReducer(reducer, initState);
+  const [resume, setResume] = useState(false);
+  // console.log("env", process.env.NEXT_DB_URL);
+  useEffect(() => {
+    getApplications(dispatch);
+  }, []);
+  console.log(state);
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-2 pb-20 gap-16 sm:p-10 font-[family-name:var(--font-geist-sans)]">
@@ -24,11 +39,22 @@ export default function Home() {
         <h3 className="text-xl">H3 Text</h3>
         <h4 className="text-lg">H4 Text</h4> */}
         <p className="text-center">{home.subtitle[lang]}</p>
-        <HomeRoot
-          navSave={() => console.log("Navigate to Save")}
-          navCreate={() => console.log("Navigate to Create")}
-        />
-        <HomeOpen backOnClick={() => console.log("Back Button")} />
+        {resume ? (
+          <HomeOpen
+            backOnClick={() => setResume(false)}
+            state={state}
+            text={home}
+            lang={lang}
+          />
+        ) : (
+          <HomeRoot
+            navSave={() => setResume(true)}
+            navCreate={() => console.log("Navigate to Create")}
+            state={state}
+            text={home}
+            lang={lang}
+          />
+        )}
       </main>
     </div>
   );

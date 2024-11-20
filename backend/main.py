@@ -1,9 +1,24 @@
 from typing import Annotated
 from fastapi import FastAPI, Path, HTTPException # type: ignore
+from fastapi.middleware.cors import CORSMiddleware # type: ignore
 from helper import Query
 from model import AppName, AppForm, SuccessBody, output_body, form_errors
 app = FastAPI()
 
+origins = [
+    "http://localhost.tiangolo.com",
+    "https://localhost.tiangolo.com",
+    "http://localhost",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def all_applications():

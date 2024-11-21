@@ -8,3 +8,4 @@ export type {
 } from "./model";
 export { getApplications, getOneApplication } from "./api";
 export { getInitState, getReducer } from "./reducers";
+export { default as initForm } from "./form";

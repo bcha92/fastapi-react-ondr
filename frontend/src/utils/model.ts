@@ -23,7 +23,7 @@ export interface FormBody extends AppName {
 }
 
 export interface Application extends FormBody {
-  id: number | undefined;
+  id?: number | undefined;
   submitted: number;
 }
 

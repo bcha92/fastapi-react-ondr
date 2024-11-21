@@ -87,10 +87,6 @@ const text = {
       en: "PO BOX",
       fr: "CP",
     },
-    address_rr: {
-      en: "Rural Route ",
-      fr: "Route rurale ",
-    },
     city: {
       en: "City/Town ",
       fr: "Ville ",

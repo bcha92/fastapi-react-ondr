@@ -23,7 +23,7 @@ export interface FormBody extends AppName {
 }
 
 export interface Application extends FormBody {
-  id: number | undefined;
+  id?: number | undefined;
   submitted: number;
 }
 
@@ -31,4 +31,9 @@ export type ReducerState = {
   status: string;
   error?: any;
   data?: any;
+};
+
+export type RadioSchema = {
+  label: string;
+  value: string;
 };

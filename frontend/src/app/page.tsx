@@ -2,13 +2,13 @@
 "use client";
 import { useContext, useReducer, useEffect, useState } from "react";
 import { ThemeContext } from "./theme-provider";
-import { text, getApplications, getInitState, getReducer } from "@/utils";
+import { text, getApplications, getInitState, reducer } from "@/utils";
 import { Header, HomeRoot, HomeOpen } from "../components";
 
 export default function Home() {
   const { home } = text;
   const { lang }: { lang: string } = useContext(ThemeContext);
-  const [state, dispatch] = useReducer(getReducer, getInitState);
+  const [state, dispatch] = useReducer(reducer, getInitState);
   const [resume, setResume] = useState(false);
   // console.log("env", process.env.NEXT_DB_URL);
   useEffect(() => {

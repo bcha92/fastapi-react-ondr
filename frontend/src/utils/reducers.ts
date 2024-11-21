@@ -4,7 +4,7 @@ export const getInitState = {
   data: undefined,
 };
 
-export const getReducer = (state, action) => {
+export const reducer = (state, action) => {
   switch (action.type) {
     case "loading":
       return { status: action.type, error: undefined, data: undefined };

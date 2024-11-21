@@ -55,6 +55,18 @@ const text = {
       en: "Sex ",
       fr: "Sexe ",
     },
+    m: {
+      en: "Male",
+      fr: "Homme",
+    },
+    f: {
+      en: "Female",
+      fr: "Femme",
+    },
+    x: {
+      en: "Other",
+      fr: "Autre",
+    },
     height: {
       en: "Height (cm) ",
       fr: "Taille (cm) ",
@@ -72,8 +84,8 @@ const text = {
       fr: "Nom de rue ",
     },
     address_po: {
-      en: "PO Box ",
-      fr: "Case postale ",
+      en: "PO BOX",
+      fr: "CP",
     },
     address_rr: {
       en: "Rural Route ",

@@ -32,3 +32,8 @@ export type ReducerState = {
   error?: any;
   data?: any;
 };
+
+export type RadioSchema = {
+  label: string;
+  value: string;
+};

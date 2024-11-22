@@ -1,7 +1,13 @@
 "use client"; // Dark/Light Layout and EN/FR Language Mode
 import { createContext, ReactNode, useState } from "react";
+import { LangThemeContext } from "@/utils";
 
-export const ThemeContext = createContext({});
+export const ThemeContext = createContext<LangThemeContext>({
+  lang: "en",
+  theme: "dark",
+  toggleLang: () => {},
+  toggleTheme: () => {},
+});
 // const mode =
 //   typeof window !== undefined &&
 //   window.matchMedia("(prefers-color-scheme: dark)").matches

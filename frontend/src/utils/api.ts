@@ -54,16 +54,21 @@ export const createApplication = async (
   set({ type: "loading" });
   const { app_name } = body;
 
-  AxiosInstance.post(`${NEXT_DB_URL}/create`)
-    .then((response) => {
-      set({ type: "done", data: response.data });
-    })
-    .catch((err) => {
-      set({ type: "error", error: { ...err, app_name }, data: body });
-      console.log(err);
+  if (app_name.length < 1) {
+    set({
+      type: "error",
+      error: "Your app name must be at least 1 charactrer long!",
     });
-
-  set({ type: "done" });
+  } else {
+    AxiosInstance.post(`${NEXT_DB_URL}/create`, body)
+      .then((response) => {
+        set({ type: "done", data: response.data });
+      })
+      .catch((err) => {
+        set({ type: "error", error: { ...err, app_name }, data: body });
+        set({ type: "error", error: err });
+      });
+  }
 };
 
 export const updateApplication = async (
@@ -76,7 +81,7 @@ export const updateApplication = async (
 
   AxiosInstance.patch(
     submit
-      ? `${NEXT_DB_URL}/save/${id}?submit="true"`
+      ? `${NEXT_DB_URL}/save/${id}?submit=true`
       : `${NEXT_DB_URL}/save/${id}`,
     body,
     config
@@ -86,8 +91,5 @@ export const updateApplication = async (
     })
     .catch((err) => {
       set({ type: "error", error: { ...err, app_id: id }, data: body });
-      console.log(err);
     });
-
-  set({ type: "done" });
 };

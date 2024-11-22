@@ -8,6 +8,8 @@ const Selection = ({
   disabled,
   onChange,
   required,
+  validation,
+  valMessage,
 }: {
   id: string;
   selections: string[];
@@ -16,9 +18,13 @@ const Selection = ({
   disabled?: boolean;
   onChange?: ChangeEventHandler<HTMLSelectElement>;
   required?: boolean;
+  validation?: boolean;
+  valMessage?: string;
 }) => {
   return (
-    <div className="text-white">
+    <div
+      className={"text-white " + (validation ? "border-red-500 border-2" : "")}
+    >
       <label htmlFor={id}>
         {label && `${label} `}
         <select
@@ -26,17 +32,18 @@ const Selection = ({
           name={id}
           required={required}
           defaultValue={defaultValue}
-          className="text-black"
+          className="text-black text-lg "
           disabled={disabled}
           onChange={onChange}
         >
           {selections.map((value, k) => (
-            <option key={`${value}-${k}`} value={value}>
+            <option key={`${value}-${k}`} id={value} value={value}>
               {value}
             </option>
           ))}
         </select>
       </label>
+      {validation && <p className="text-red-500 text-xs">{valMessage}</p>}
     </div>
   );
 };

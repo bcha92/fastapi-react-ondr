@@ -1,5 +1,7 @@
+import { TextContext } from "./";
+
 // Select between English and French
-const text = {
+const text: TextContext = {
   home: {
     title: {
       en: "Welcome to the Ontario Driver License Application Portal",
@@ -12,6 +14,22 @@ const text = {
     new: {
       en: "New",
       fr: "Nouvelle application",
+    },
+    create: {
+      en: "Create",
+      fr: "Créer",
+    },
+    new_application_name: {
+      en: "New Application Name",
+      fr: "Nouveau nom d'application",
+      err: {
+        en: "Your app name must be at least 1 character long!",
+        fr: "Le nom de votre application doit comporter au moins 1 caractère!",
+      },
+      res: {
+        en: "Successfully created new form! Please wait for redirect...",
+        fr: "Nouveau formulaire créé avec succès! Veuillez patienter pendant la redirection...",
+      },
     },
     resume: {
       en: "View / Resume application",
@@ -35,6 +53,14 @@ const text = {
     },
   },
   formPage: {
+    app_name: {
+      en: "App Name",
+      fr: "Nom d'App",
+    },
+    save: {
+      en: "Save",
+      fr: "Enregistrer",
+    },
     last_name: {
       en: "Last Name ",
       fr: "Nom ",
@@ -94,6 +120,26 @@ const text = {
     postal_code: {
       en: "Postal Code",
       fr: "Code postale",
+    },
+    submit: {
+      en: "Submit",
+      fr: "Soumettre",
+    },
+    required: {
+      en: "required",
+      fr: "requis",
+    },
+    required_po: {
+      en: "required if no civic address entered",
+      fr: "requis si aucune adresse civique n'est enregistrée",
+    },
+    required_address: {
+      en: "required if no po/rr entered",
+      fr: "requis si aucun po/rr n'est enregistré",
+    },
+    required_height: {
+      en: "required, value must be above 0",
+      fr: "requis doit être supérieur à 0",
     },
   },
 };

@@ -80,7 +80,7 @@ def form_errors(form: AppForm) -> list[str]:
     if form.province not in provinces: errors_list.append("province")
     
     # Postal code will follow the A1A 1A1 regular expression check
-    if re.search(r"[A-Z]{1}\d{1}[A-Z]{1}\s{1}\d{1}[A-Z]{1}\d{1}", form.postal_code.upper()) == None: errors_list.append("postal_code")
+    if re.search(r"[A-Z]{1}\d{1}[A-Z]{1}\s?\d{1}[A-Z]{1}\d{1}", form.postal_code.upper()) == None: errors_list.append("postal_code")
     
     return errors_list
 

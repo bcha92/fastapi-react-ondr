@@ -357,7 +357,7 @@ export default function Form({
                   }
                   className="ml-4 max-w-[100px] -mt-5"
                   validation={
-                    (errorVal as string[]).includes("first_name")
+                    (errorVal as string[]).includes("postal_code")
                       ? "error"
                       : undefined
                   }

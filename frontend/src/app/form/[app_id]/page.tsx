@@ -39,18 +39,15 @@ export default function Form({
       }
     }
     updateApplication(handleSubmit, { ...form, address_po: addressPO }, final);
-    console.log(submit);
     if (final && submit.status === "error") {
       setErrorVal(
         submit.error.response.data.detail.split(":")[1].trim().split(", ")
       );
+      return;
     }
-    // if (final && submit.status !== "error") {
-    //   router.push("/");
-    // }
-    // else {
-    //   router.refresh();
-    // }
+    if (final && submit.status === "done") {
+      router.push("/");
+    }
   };
 
   useEffect(() => {
@@ -78,7 +75,6 @@ export default function Form({
     }
   }, [params, state.status, state.data, state.error]);
 
-  console.log(errorVal);
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <Header
@@ -117,7 +113,7 @@ export default function Form({
             Please wait a moment! Your Application is Loading...
           </h1>
         ) : state?.data?.body ? (
-          <form onSubmit={() => console.log("submit")}>
+          <form>
             {/* Name */}
             <fieldset className="p-0 pt-8 pb-8 border-grey-500 border-b-2 last-of-type:border-b-0 flex w-full justify-between">
               <Text
@@ -250,7 +246,7 @@ export default function Form({
                 }
                 className="ml-4 mr-4 max-w-[100px]"
                 validation={
-                  (errorVal as string[]).includes("address_street_num")
+                  (errorVal as string[]).includes("address_po")
                     ? "error"
                     : undefined
                 }
@@ -266,7 +262,7 @@ export default function Form({
                   setForm({ ...form, address_street_name: e.target.value })
                 }
                 validation={
-                  (errorVal as string[]).includes("address_street_name")
+                  (errorVal as string[]).includes("address_po")
                     ? "error"
                     : undefined
                 }

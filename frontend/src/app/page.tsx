@@ -2,11 +2,17 @@
 "use client";
 import { useContext, useReducer, useEffect, useState } from "react";
 import { ThemeContext } from "./theme-provider";
-import { text, getApplications, getInitState, reducer } from "@/utils";
+import {
+  text,
+  getApplications,
+  getInitState,
+  reducer,
+  TextHomeContext,
+} from "@/utils";
 import { Header, HomeRoot, HomeOpen, HomeNew } from "../components";
 
 export default function Home() {
-  const { home } = text;
+  const { home }: { home: TextHomeContext } = text;
   const { lang }: { lang: string } = useContext(ThemeContext);
   const [state, dispatch] = useReducer(reducer, getInitState);
   const [resume, setResume] = useState(false);

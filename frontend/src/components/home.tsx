@@ -1,5 +1,5 @@
 import { Add, Undo, FolderOpen } from "@mui/icons-material";
-import { type MouseEventHandler, useState, useReducer } from "react";
+import { type MouseEventHandler, useState, useReducer, Context } from "react";
 import { useRouter } from "next/navigation";
 import {
   Application,
@@ -7,6 +7,8 @@ import {
   createApplication,
   getInitState,
   reducer,
+  TextHomeContext,
+  LangThemeContext,
 } from "@/utils";
 import Card from "./card";
 import Text from "./form/text";
@@ -21,8 +23,8 @@ export const HomeRoot = ({
   navSave: MouseEventHandler<HTMLButtonElement>;
   navCreate: MouseEventHandler<HTMLButtonElement>;
   state: ReducerState;
-  text: object;
-  lang: string;
+  text: TextHomeContext;
+  lang: LangThemeContext;
 }) => {
   return (
     <div className="flex flex-row">
@@ -59,8 +61,8 @@ export const HomeOpen = ({
 }: {
   backOnClick: MouseEventHandler<HTMLButtonElement>;
   state: ReducerState;
-  text: object;
-  lang: string;
+  text: TextHomeContext;
+  lang: LangThemeContext;
 }) => {
   const router = useRouter();
   return (
@@ -103,8 +105,8 @@ export const HomeNew = ({
   lang,
 }: {
   backOnClick: MouseEventHandler<HTMLButtonElement>;
-  text: object;
-  lang: string;
+  text: TextHomeContext;
+  lang: LangThemeContext;
 }) => {
   const [appName, setAppName] = useState("");
   const [state, dispatch] = useReducer(reducer, getInitState);
@@ -117,7 +119,14 @@ export const HomeNew = ({
     <div className="flex flex-col items-center w-full">
       <Text
         id="app_name"
-        onChange={(e) => setAppName(e.target.value)}
+        onChange={(e) => {
+          setAppName(e.target.value);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            createApplication(dispatch, { app_name: appName });
+          }
+        }}
         label={text.new_application_name[lang]}
         validation={
           state.status === "done"

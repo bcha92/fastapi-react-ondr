@@ -23,7 +23,7 @@ export default function Form({
   const [porr, setPORR] = useState("");
   const [errorVal, setErrorVal] = useState([]);
   const { formPage } = text;
-  const { lang }: { lang: string } = useContext(ThemeContext);
+  const { lang } = useContext(ThemeContext);
   const isSubmitted = state?.data?.body?.submitted === 1; // User should not be able to edit form if already submitted // view only
   const router = useRouter();
 
@@ -73,7 +73,16 @@ export default function Form({
       setPORR(parsedPORR);
       setForm({ ...body, address_po: parsedPO });
     }
-  }, [params, state.status, state.data, state.error]);
+  }, [
+    params,
+    state.status,
+    state.data,
+    state.error,
+    submit.status,
+    submit.data,
+    submit.error,
+    form.address_po.length,
+  ]);
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
@@ -130,7 +139,7 @@ export default function Form({
                     ? "error"
                     : undefined
                 }
-                validationMessage="required"
+                validationMessage={formPage.required[lang]}
               />
               <Text
                 id="first-name"
@@ -146,7 +155,7 @@ export default function Form({
                     ? "error"
                     : undefined
                 }
-                validationMessage="required"
+                validationMessage={formPage.required[lang]}
               />
               <Text
                 id="middle-name"
@@ -160,7 +169,7 @@ export default function Form({
               />
             </fieldset>
             {/* Characteristics */}
-            <fieldset className="p-0 pt-8 pb-8 border-grey-500 border-b-2 last-of-type:border-b-0 flex w-full items-center justify-between">
+            <fieldset className="p-0 pt-8 pb-10 border-grey-500 border-b-2 last-of-type:border-b-0 flex w-full items-center justify-between">
               <Text
                 id="birth-date"
                 label={formPage.birth_date[lang]}
@@ -176,7 +185,7 @@ export default function Form({
                     ? "error"
                     : undefined
                 }
-                validationMessage="required"
+                validationMessage={formPage.required[lang]}
               />
               <Radio
                 id="sex"
@@ -194,7 +203,7 @@ export default function Form({
                     : formPage.sex
                 }
                 validation={(errorVal as string[]).includes("sex")}
-                valMessage="required"
+                valMessage={formPage.required[lang]}
               />
               <Text
                 id="height"
@@ -220,7 +229,7 @@ export default function Form({
                     ? "error"
                     : undefined
                 }
-                validationMessage="required, must be greater than 0"
+                validationMessage={formPage.required_height[lang]}
               />
             </fieldset>
 
@@ -250,7 +259,7 @@ export default function Form({
                     ? "error"
                     : undefined
                 }
-                validationMessage="required if no po/rr entered"
+                validationMessage={formPage.required_address[lang]}
               />
 
               <Text
@@ -266,10 +275,10 @@ export default function Form({
                     ? "error"
                     : undefined
                 }
-                validationMessage="required if no po/rr entered"
+                validationMessage={formPage.required_address[lang]}
               />
             </fieldset>
-            <fieldset className="mt-2 p-0 pt-4 pb-8 border-grey-500 border-b-2 last-of-type:border-b-0 flex w-full items-end justify-end">
+            <fieldset className="mt-4 p-0 pt-4 pb-8 border-grey-500 border-b-2 last-of-type:border-b-0 flex w-full items-end justify-end">
               <div className="flex">
                 <Selection
                   id="porr"
@@ -291,7 +300,7 @@ export default function Form({
                       ? "error"
                       : undefined
                   }
-                  validationMessage="required if no civic address entered"
+                  validationMessage={formPage.required_po[lang]}
                 />
               </div>
               {/* Locale */}
@@ -308,7 +317,7 @@ export default function Form({
                       ? "error"
                       : undefined
                   }
-                  validationMessage="required"
+                  validationMessage={formPage.required[lang]}
                 />
                 <Selection
                   id="province"
@@ -336,7 +345,7 @@ export default function Form({
                     "YT",
                   ]}
                   validation={(errorVal as string[]).includes("province")}
-                  valMessage="required"
+                  valMessage={formPage.required[lang]}
                 />
                 <Text
                   id="postal-code"
@@ -352,7 +361,7 @@ export default function Form({
                       ? "error"
                       : undefined
                   }
-                  validationMessage="required"
+                  validationMessage={formPage.required[lang]}
                 />
               </div>
             </fieldset>

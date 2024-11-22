@@ -1,5 +1,7 @@
+import { TextContext } from "./";
+
 // Select between English and French
-const text = {
+const text: TextContext = {
   home: {
     title: {
       en: "Welcome to the Ontario Driver License Application Portal",
@@ -122,6 +124,22 @@ const text = {
     submit: {
       en: "Submit",
       fr: "Soumettre",
+    },
+    required: {
+      en: "required",
+      fr: "requis",
+    },
+    required_po: {
+      en: "required if no civic address entered",
+      fr: "requis si aucune adresse civique n'est enregistrée",
+    },
+    required_address: {
+      en: "required if no po/rr entered",
+      fr: "requis si aucun po/rr n'est enregistré",
+    },
+    required_height: {
+      en: "required, value must be above 0",
+      fr: "requis doit être supérieur à 0",
     },
   },
 };

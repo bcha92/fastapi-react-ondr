@@ -24,7 +24,7 @@ class Query:
     
     def create_new(self, name: str) -> int:
         application = Application(
-            app_name=name, last_name="", first_name="", middle_name="", birth_date="", sex="", height=0, address_street_unit="", address_street_num="", address_street_name="", address_po="", city="", province="", postal_code="", submitted=0
+            app_name=name, last_name="", first_name="", middle_name="", birth_date="", sex="X", height=0, address_street_unit="", address_street_num="", address_street_name="", address_po="", city="", province="ON", postal_code="", submitted=0
         )
         with Session(engine) as session:    
             session.add(application)

@@ -44,40 +44,43 @@ def form_errors(form: AppForm) -> list[str]:
     genders = ["M", "F", "X"]
     a = [len(form.address_street_num), len(form.address_street_name), len(form.address_po)] # addresss length
     
-    if len(form.last_name) == 0: errors_list.append("last name")
-    if len(form.first_name) == 0: errors_list.append("first name")
+    if len(form.last_name) == 0: errors_list.append("last_name")
+    if len(form.first_name) == 0: errors_list.append("first_name")
     
     # Valid Date checker
-    bd2 = form.birth_date.split("-")
-    bd = [int(bd2[0]), int(bd2[1]), int(bd2[2])]
-    days30 = [4, 6, 9, 11] # These months only have 30 days
-    if bd[0] < 1900 or bd[0] > 2024:
-        errors_list.append("birth date")
-    elif bd[1] > 12:
-        errors_list.append("birth date")
-    elif bd[2] > 31:
-        errors_list.append("birth date")
-    elif bd[1] == 2 and bd[2] > 29: # February only has up to 29 days
-        errors_list.append("birth date")
-    elif bd[1] in days30 and bd[2] > 30:
-        errors_list.append("birth date")
+    if len(form.birth_date) == 0:
+        errors_list.append("birth_date")
+    else:
+        bd2 = form.birth_date.split("-")
+        bd = [int(bd2[0]), int(bd2[1]), int(bd2[2])]
+        days30 = [4, 6, 9, 11] # These months only have 30 days
+        if bd[0] < 1900 or bd[0] > 2024:
+            errors_list.append("birth_date")
+        elif bd[1] > 12:
+            errors_list.append("birth_date")
+        elif bd[2] > 31:
+            errors_list.append("birth_date")
+        elif bd[1] == 2 and bd[2] > 29: # February only has up to 29 days
+            errors_list.append("birth_date")
+        elif bd[1] in days30 and bd[2] > 30:
+            errors_list.append("birth_date")
     
-    if (form.sex not in genders): errors_list.append("sex/gender")
+    if (form.sex not in genders): errors_list.append("sex")
     if form.height < 1: errors_list.append("height")
     
     # Address Checker
     if a[2] == 0 and a[0] == 0 and a[1] == 0:
-        errors_list.append("address/PO Box/RR")
+        errors_list.append("address_po")
     elif a[2] == 0 and a[0] != 0 and a[1] == 0:
-        errors_list.append("address/PO Box/RR")
+        errors_list.append("address_po")
     elif a[2] == 0 and a[0] == 0 and a[1] != 0:
-        errors_list.append("address/PO Box/RR")
+        errors_list.append("address_po")
     
-    if len(form.city) == 0: errors_list.append("city/town/locale")
+    if len(form.city) == 0: errors_list.append("city")
     if form.province not in provinces: errors_list.append("province")
     
     # Postal code will follow the A1A 1A1 regular expression check
-    if re.search(r"[A-Z]{1}\d{1}[A-Z]{1}\s{1}\d{1}[A-Z]{1}\d{1}", form.postal_code.upper()) == None: errors_list.append("postal code")
+    if re.search(r"[A-Z]{1}\d{1}[A-Z]{1}\s{1}\d{1}[A-Z]{1}\d{1}", form.postal_code.upper()) == None: errors_list.append("postal_code")
     
     return errors_list
 

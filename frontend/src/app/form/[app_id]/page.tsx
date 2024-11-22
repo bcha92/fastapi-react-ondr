@@ -1,7 +1,8 @@
 "use client";
-import { useReducer, useEffect, useState, useContext } from "react";
+import { useReducer, useEffect, useState, useContext, MouseEvent } from "react";
+import { useRouter } from "next/navigation";
 import { ThemeContext } from "../../theme-provider";
-import { Header, Text, Radio, Selection } from "@/components";
+import { Header, Text, Radio, Selection, Footer } from "@/components";
 import {
   text,
   getOneApplication,
@@ -20,15 +21,43 @@ export default function Form({
   const [submit, handleSubmit] = useReducer(reducer, getInitState);
   const [form, setForm] = useState(initForm);
   const [porr, setPORR] = useState("");
+  const [errorVal, setErrorVal] = useState([]);
   const { formPage } = text;
   const { lang }: { lang: string } = useContext(ThemeContext);
   const isSubmitted = state?.data?.body?.submitted === 1; // User should not be able to edit form if already submitted // view only
+  const router = useRouter();
+
+  const handleAppSubmit = (final: boolean = false, event: MouseEvent<any>) => {
+    event.preventDefault();
+
+    let addressPO = "";
+    if (form.address_po.trim().length > 0) {
+      if (porr === "RR") {
+        addressPO = `${porr} ${form.address_po}`;
+      } else {
+        addressPO = `${formPage.address_po[lang]} ${form.address_po}`;
+      }
+    }
+    updateApplication(handleSubmit, { ...form, address_po: addressPO }, final);
+    console.log(submit);
+    if (final && submit.status === "error") {
+      setErrorVal(
+        submit.error.response.data.detail.split(":")[1].trim().split(", ")
+      );
+    }
+    // if (final && submit.status !== "error") {
+    //   router.push("/");
+    // }
+    // else {
+    //   router.refresh();
+    // }
+  };
 
   useEffect(() => {
     if (state.status === "idle") {
       getOneApplication(dispatch, params);
     }
-    if (state.data && !state.error) {
+    if (state.data && !state.error && form.address_po.length === 0) {
       const { body } = state.data;
       let parsedPORR = "";
       let parsedPO = "";
@@ -47,8 +76,9 @@ export default function Form({
       setPORR(parsedPORR);
       setForm({ ...body, address_po: parsedPO });
     }
-  }, [params, state.status, state.data, state.error, form.sex]);
+  }, [params, state.status, state.data, state.error]);
 
+  console.log(errorVal);
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <Header
@@ -60,9 +90,29 @@ export default function Form({
         state={form}
         save={formPage.save[lang]}
         valMessage={text.home.new_application_name.err[lang]}
+        warning={
+          form.submitted === 1
+            ? [
+                true,
+                "This form is already submitted and cannot be edited!",
+                "bg-orange-500",
+              ]
+            : errorVal.length > 0
+            ? [
+                true,
+                "Invalid input entries for the following: " +
+                  errorVal.join(", "),
+                "bg-red-500",
+              ]
+            : undefined
+        }
       />
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        {state.status === "loading" || state.status === "idle" ? (
+        {submit.status === "done" && submit.error ? (
+          <h1 className="text-3xl">
+            Your application has been submitted! Redirecting to Home Page...
+          </h1>
+        ) : state.status === "loading" || state.status === "idle" ? (
           <h1 className="text-3xl">
             Please wait a moment! Your Application is Loading...
           </h1>
@@ -79,6 +129,12 @@ export default function Form({
                   setForm({ ...form, last_name: e.target.value })
                 }
                 className="ml-4 mr-4"
+                validation={
+                  (errorVal as string[]).includes("last_name")
+                    ? "error"
+                    : undefined
+                }
+                validationMessage="required"
               />
               <Text
                 id="first-name"
@@ -89,6 +145,12 @@ export default function Form({
                   setForm({ ...form, first_name: e.target.value })
                 }
                 className="ml-4 mr-4"
+                validation={
+                  (errorVal as string[]).includes("first_name")
+                    ? "error"
+                    : undefined
+                }
+                validationMessage="required"
               />
               <Text
                 id="middle-name"
@@ -113,6 +175,12 @@ export default function Form({
                   setForm({ ...form, birth_date: e.target.value })
                 }
                 className="ml-4 mr-4 max-w-[200px]"
+                validation={
+                  (errorVal as string[]).includes("birth_date")
+                    ? "error"
+                    : undefined
+                }
+                validationMessage="required"
               />
               <Radio
                 id="sex"
@@ -129,6 +197,8 @@ export default function Form({
                     ? state.data.body.sex
                     : formPage.sex
                 }
+                validation={(errorVal as string[]).includes("sex")}
+                valMessage="required"
               />
               <Text
                 id="height"
@@ -149,6 +219,12 @@ export default function Form({
                   setForm({ ...form, height: Number(e.target.value) });
                 }}
                 className="ml-4 mr-4 max-w-[100px]"
+                validation={
+                  (errorVal as string[]).includes("height")
+                    ? "error"
+                    : undefined
+                }
+                validationMessage="required, must be greater than 0"
               />
             </fieldset>
 
@@ -173,6 +249,12 @@ export default function Form({
                   setForm({ ...form, address_street_num: e.target.value })
                 }
                 className="ml-4 mr-4 max-w-[100px]"
+                validation={
+                  (errorVal as string[]).includes("address_street_num")
+                    ? "error"
+                    : undefined
+                }
+                validationMessage="required if no po/rr entered"
               />
 
               <Text
@@ -183,6 +265,12 @@ export default function Form({
                 onChange={(e) =>
                   setForm({ ...form, address_street_name: e.target.value })
                 }
+                validation={
+                  (errorVal as string[]).includes("address_street_name")
+                    ? "error"
+                    : undefined
+                }
+                validationMessage="required if no po/rr entered"
               />
             </fieldset>
             <fieldset className="mt-2 p-0 pt-4 pb-8 border-grey-500 border-b-2 last-of-type:border-b-0 flex w-full items-end justify-end">
@@ -202,6 +290,12 @@ export default function Form({
                     setForm({ ...form, address_po: e.target.value })
                   }
                   className="ml-1 mr-4 max-w-[200px]"
+                  validation={
+                    (errorVal as string[]).includes("address_po")
+                      ? "error"
+                      : undefined
+                  }
+                  validationMessage="required if no civic address entered"
                 />
               </div>
               {/* Locale */}
@@ -213,6 +307,12 @@ export default function Form({
                   value={state.data.body.city}
                   onChange={(e) => setForm({ ...form, city: e.target.value })}
                   className="ml-4 mr-4 max-w-[250px] -mt-5"
+                  validation={
+                    (errorVal as string[]).includes("city")
+                      ? "error"
+                      : undefined
+                  }
+                  validationMessage="required"
                 />
                 <Selection
                   id="province"
@@ -239,6 +339,8 @@ export default function Form({
                     "SK",
                     "YT",
                   ]}
+                  validation={(errorVal as string[]).includes("province")}
+                  valMessage="required"
                 />
                 <Text
                   id="postal-code"
@@ -249,50 +351,15 @@ export default function Form({
                     setForm({ ...form, postal_code: e.target.value })
                   }
                   className="ml-4 max-w-[100px] -mt-5"
+                  validation={
+                    (errorVal as string[]).includes("first_name")
+                      ? "error"
+                      : undefined
+                  }
+                  validationMessage="required"
                 />
               </div>
             </fieldset>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                let addressPO = "";
-                if (form.address_po.trim().length > 0) {
-                  if (porr === "RR") {
-                    addressPO = `${porr} ${form.address_po}`;
-                  } else {
-                    addressPO = `${formPage.address_po[lang]} ${form.address_po}`;
-                  }
-                }
-                updateApplication(
-                  handleSubmit,
-                  { ...form, address_po: addressPO },
-                  false
-                );
-              }}
-            >
-              SAVE
-            </button>
-            <button
-              type="submit"
-              onClick={(e) => {
-                e.preventDefault();
-                let addressPO = "";
-                if (form.address_po.trim().length > 0) {
-                  if (porr === "RR") {
-                    addressPO = `${porr} ${form.address_po}`;
-                  } else {
-                    addressPO = `${formPage.address_po[lang]} ${form.address_po}`;
-                  }
-                }
-                updateApplication(
-                  handleSubmit,
-                  { ...form, address_po: addressPO },
-                  false
-                );
-              }}
-            >
-              SUBMIT
-            </button>
           </form>
         ) : (
           <h1 className="text-3xl">
@@ -300,6 +367,13 @@ export default function Form({
           </h1>
         )}
       </main>
+      <Footer
+        save={formPage.save[lang]}
+        submit={formPage.submit[lang]}
+        saveHandler={(e) => handleAppSubmit(false, e)}
+        submitHandler={(e) => handleAppSubmit(true, e)}
+        disabled={form.submitted === 1}
+      />
     </div>
   );
 }

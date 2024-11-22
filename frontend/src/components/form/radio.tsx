@@ -8,6 +8,8 @@ const Radio = ({
   onChange,
   disabled,
   defaultValue,
+  validation,
+  valMessage,
 }: {
   id: string;
   title: string;
@@ -15,9 +17,16 @@ const Radio = ({
   onChange: ChangeEventHandler<HTMLInputElement>;
   disabled?: boolean;
   defaultValue?: string;
+  validation?: boolean;
+  valMessage?: string;
 }) => {
   return (
-    <div className="flex flex-col items-center">
+    <div
+      className={
+        "flex flex-col items-center " +
+        (validation ? "border-2 border-red-500" : "")
+      }
+    >
       <label>{title}</label>
       <div>
         {selections.map((selection, i) => {
@@ -41,6 +50,7 @@ const Radio = ({
           );
         })}
       </div>
+      {validation && <p className="text-red-500 text-xs">Required</p>}
     </div>
   );
 };

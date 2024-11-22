@@ -81,7 +81,7 @@ export const updateApplication = async (
 
   AxiosInstance.patch(
     submit
-      ? `${NEXT_DB_URL}/save/${id}?submit="true"`
+      ? `${NEXT_DB_URL}/save/${id}?submit=true`
       : `${NEXT_DB_URL}/save/${id}`,
     body,
     config
@@ -92,6 +92,4 @@ export const updateApplication = async (
     .catch((err) => {
       set({ type: "error", error: { ...err, app_id: id }, data: body });
     });
-
-  set({ type: "done" });
 };

@@ -119,6 +119,10 @@ const text = {
       en: "Postal Code",
       fr: "Code postale",
     },
+    submit: {
+      en: "Submit",
+      fr: "Soumettre",
+    },
   },
 };
 

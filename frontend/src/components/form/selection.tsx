@@ -26,7 +26,7 @@ const Selection = ({
           name={id}
           required={required}
           defaultValue={defaultValue}
-          className="text-black"
+          className="text-black text-lg"
           disabled={disabled}
           onChange={onChange}
         >

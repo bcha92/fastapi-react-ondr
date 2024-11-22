@@ -15,6 +15,10 @@ const Text = ({
   maxNum,
   onFocusOut,
   onKeyDown,
+  className = "",
+  inputClassName = "",
+  validationMessage,
+  validation,
 }: {
   id: string;
   label?: string;
@@ -26,8 +30,15 @@ const Text = ({
   maxNum?: string | number;
   onFocusOut?: FocusEventHandler<HTMLInputElement>;
   onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
+  className?: string;
+  inputClassName?: string;
+  validationMessage?: string;
+  validation?: string;
 }) => (
-  <label htmlFor={id}>
+  <label
+    htmlFor={id}
+    className={"flex flex-col w-full text-sm" + ` ${className}`}
+  >
     {label}
     <input
       id={id}
@@ -41,7 +52,26 @@ const Text = ({
       pattern={inputType === "number" ? "[0-9/s]*" : undefined}
       onBlur={onFocusOut}
       onKeyDown={onKeyDown}
+      className={
+        "text-base " +
+        inputClassName +
+        (validation === "error" ? " border-2 border-rose-500" : "")
+      }
     />
+    {validation && (
+      <p
+        className={
+          "text-xs " +
+          (validation === "success"
+            ? "text-green-700"
+            : validation === "error"
+            ? "text-red-700"
+            : "")
+        }
+      >
+        {validationMessage}
+      </p>
+    )}
   </label>
 );
 

@@ -13,6 +13,22 @@ const text = {
       en: "New",
       fr: "Nouvelle application",
     },
+    create: {
+      en: "Create",
+      fr: "Créer",
+    },
+    new_application_name: {
+      en: "New Application Name",
+      fr: "Nouveau nom d'application",
+      err: {
+        en: "Your app name must be at least 1 character long!",
+        fr: "Le nom de votre application doit comporter au moins 1 caractère!",
+      },
+      res: {
+        en: "Successfully created new form! Please wait for redirect...",
+        fr: "Nouveau formulaire créé avec succès! Veuillez patienter pendant la redirection...",
+      },
+    },
     resume: {
       en: "View / Resume application",
       fr: "Afficher / Continuer une application",
@@ -35,6 +51,14 @@ const text = {
     },
   },
   formPage: {
+    app_name: {
+      en: "App Name",
+      fr: "Nom d'App",
+    },
+    save: {
+      en: "Save",
+      fr: "Enregistrer",
+    },
     last_name: {
       en: "Last Name ",
       fr: "Nom ",

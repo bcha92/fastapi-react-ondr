@@ -3,14 +3,14 @@
 import { useContext, useReducer, useEffect, useState } from "react";
 import { ThemeContext } from "./theme-provider";
 import { text, getApplications, getInitState, reducer } from "@/utils";
-import { Header, HomeRoot, HomeOpen } from "../components";
+import { Header, HomeRoot, HomeOpen, HomeNew } from "../components";
 
 export default function Home() {
   const { home } = text;
   const { lang }: { lang: string } = useContext(ThemeContext);
   const [state, dispatch] = useReducer(reducer, getInitState);
   const [resume, setResume] = useState(false);
-  // console.log("env", process.env.NEXT_DB_URL);
+  const [newForm, setNewForm] = useState(false);
   useEffect(() => {
     if (state.status === "idle") {
       getApplications(dispatch);
@@ -33,10 +33,17 @@ export default function Home() {
             text={home}
             lang={lang}
           />
+        ) : newForm ? (
+          <HomeNew
+            backOnClick={() => setNewForm(false)}
+            state={state}
+            text={home}
+            lang={lang}
+          />
         ) : (
           <HomeRoot
             navSave={() => setResume(true)}
-            navCreate={() => console.log("Navigate to Create")}
+            navCreate={() => setNewForm(true)}
             state={state}
             text={home}
             lang={lang}

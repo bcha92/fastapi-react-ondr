@@ -1,7 +1,15 @@
 import { Add, Undo, FolderOpen } from "@mui/icons-material";
-import type { MouseEventHandler } from "react";
-import { Application, ReducerState } from "@/utils/model";
+import { type MouseEventHandler, useState, useReducer } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Application,
+  ReducerState,
+  createApplication,
+  getInitState,
+  reducer,
+} from "@/utils";
 import Card from "./card";
+import Text from "./form/text";
 
 export const HomeRoot = ({
   navSave,
@@ -53,33 +61,94 @@ export const HomeOpen = ({
   state: ReducerState;
   text: object;
   lang: string;
-}) => (
-  <div className="grid grid-cols-3">
-    <Card
-      name={text.back[lang]}
-      iconStatic={<Undo className="text-black" />}
-      onClick={backOnClick}
-    />
-    {state.data && state.data.body.length > 0 ? (
-      state.data.body
-        .map((app: Application) => (
-          <Card
-            key={app.id}
-            name={app.app_name}
-            // TODO
-            onClick={() => console.log(app.id)}
-            loading={state.status === "loading"}
-            loaded={state.status === "done" && state.data !== undefined}
-            disabled={state.status !== "done" || state.error !== undefined}
-          />
-        ))
-        .reverse() // shows desc order (most recent -> older)
-    ) : (
+}) => {
+  const router = useRouter();
+  return (
+    <div className="grid grid-cols-3">
       <Card
-        name={
-          state.status === "loading" ? text.loading[lang] : text.notFound[lang]
-        }
+        name={text.back[lang]}
+        iconStatic={<Undo className="text-black" />}
+        onClick={backOnClick}
       />
-    )}
-  </div>
-);
+      {state.data && state.data.body.length > 0 ? (
+        state.data.body
+          .map((app: Application) => (
+            <Card
+              key={app.id}
+              name={app.app_name}
+              // TODO
+              onClick={() => router.push(`/form/${app.id}`)}
+              loading={state.status === "loading"}
+              loaded={state.status === "done" && state.data !== undefined}
+              disabled={state.status !== "done" || state.error !== undefined}
+            />
+          ))
+          .reverse() // shows desc order (most recent -> older)
+      ) : (
+        <Card
+          name={
+            state.status === "loading"
+              ? text.loading[lang]
+              : text.notFound[lang]
+          }
+        />
+      )}
+    </div>
+  );
+};
+
+export const HomeNew = ({
+  backOnClick,
+  text,
+  lang,
+}: {
+  backOnClick: MouseEventHandler<HTMLButtonElement>;
+  text: object;
+  lang: string;
+}) => {
+  const [appName, setAppName] = useState("");
+  const [state, dispatch] = useReducer(reducer, getInitState);
+  const router = useRouter();
+
+  if (state.status === "done") {
+    router.push(`/form/${state.data.body.id}`);
+  }
+  return (
+    <div className="flex flex-col items-center w-full">
+      <Text
+        id="app_name"
+        onChange={(e) => setAppName(e.target.value)}
+        label={text.new_application_name[lang]}
+        validation={
+          state.status === "done"
+            ? "success"
+            : state.status === "error"
+            ? "error"
+            : undefined
+        }
+        validationMessage={
+          state.status === "done"
+            ? text.new_application_name.res[lang]
+            : state.status === "error"
+            ? text.new_application_name.err[lang]
+            : undefined
+        }
+        className="items-center"
+        inputClassName="max-w-[300px]"
+      />
+
+      <div className="mt-4">
+        <Card
+          name={text.create[lang]}
+          iconStatic={<Add className="text-black" />}
+          onClick={() => createApplication(dispatch, { app_name: appName })}
+        />
+        <Card
+          name={text.back[lang]}
+          iconStatic={<Undo className="text-black" />}
+          onClick={backOnClick}
+        />
+      </div>
+    </div>
+  );
+};

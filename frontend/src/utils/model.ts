@@ -3,7 +3,7 @@ export interface AppName {
 }
 
 export interface CreatedForm extends AppName {
-  id: number;
+  id?: number;
 }
 
 export interface FormBody extends AppName {
